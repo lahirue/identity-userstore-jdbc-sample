@@ -27,7 +27,6 @@ public class WSUserStoreComponentHolder {
     private static WSUserStoreComponentHolder instance = new WSUserStoreComponentHolder();
     private RegistryService registryService;
     private RealmService realmService;
-    private UserStoreManager userStoreManager;
 
     public static WSUserStoreComponentHolder getInstance() {
         return instance;
@@ -50,11 +49,4 @@ public class WSUserStoreComponentHolder {
         this.realmService = realmService;
     }
 
-    public UserStoreManager getUserStoreManager() {
-        return userStoreManager;
-    }
-
-    public void setUserStoreManager(UserStoreManager userStoreManager) {
-        this.userStoreManager = userStoreManager;
-    }
 }

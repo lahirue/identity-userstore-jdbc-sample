@@ -35,11 +35,6 @@ import org.wso2.carbon.user.core.service.RealmService;
  * interface="org.wso2.carbon.registry.core.service.RegistryService"
  * cardinality="1..1" policy="dynamic" bind="setRegistryService"
  * unbind="unsetRegistryService"
- *
- * @scr.reference name="sample.jdbc.user.store.component"
- * interface="org.wso2.carbon.user.api.UserStoreManager"
- * cardinality="1..1" policy="dynamic" bind="setUserStoreManager"
- * unbind="unsetUserStoreManager"
  */
 public class WSUserStoreDSComponent {
 
@@ -49,7 +44,6 @@ public class WSUserStoreDSComponent {
         try {
 
             UserStoreManager cloudSampleJDBCUserStoreManager = new CloudSampleJDBCUserStoreManager();
-            WSUserStoreComponentHolder.getInstance().setUserStoreManager(cloudSampleJDBCUserStoreManager);
             ctxt.getBundleContext().registerService(UserStoreManager.class.getName(),
                     cloudSampleJDBCUserStoreManager, null);
 
@@ -90,19 +84,5 @@ public class WSUserStoreDSComponent {
         }
         WSUserStoreComponentHolder.getInstance().setRegistryService(null);
     }
-
-    protected void setUserStoreManager(UserStoreManager userStoreManager) {
-        if(userStoreManager instanceof  CloudSampleJDBCUserStoreManager) {
-            WSUserStoreComponentHolder.getInstance().setUserStoreManager(userStoreManager);
-        }
-    }
-
-    protected void unsetUserStoreManager(UserStoreManager userStoreManager) {
-
-        WSUserStoreComponentHolder.getInstance().setUserStoreManager(null);
-    }
-
-
-
 
 }

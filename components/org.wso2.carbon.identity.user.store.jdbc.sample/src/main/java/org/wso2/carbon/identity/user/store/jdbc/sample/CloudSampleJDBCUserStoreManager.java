@@ -20,7 +20,6 @@ package org.wso2.carbon.identity.user.store.jdbc.sample;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.CarbonConstants;
-import org.wso2.carbon.identity.user.store.jdbc.sample.model.SampleUser;
 import org.wso2.carbon.user.api.Properties;
 import org.wso2.carbon.user.api.Property;
 import org.wso2.carbon.user.core.UserCoreConstants;
@@ -40,7 +39,6 @@ import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -454,57 +452,5 @@ public class CloudSampleJDBCUserStoreManager extends JDBCUserStoreManager {
             DatabaseUtil.closeAllConnections(dbConnection);
         }
 
-    }
-
-    public List<SampleUser> getSampleUsersList() throws UserStoreException {
-
-        List<SampleUser> users = Collections.EMPTY_LIST;
-        Connection dbConnection = null;
-        String sqlStmt;
-        PreparedStatement prepStmt = null;
-        ResultSet rs = null;
-
-        try {
-
-            dbConnection = getDBConnection();
-            if (dbConnection == null) {
-                throw new UserStoreException("null connection");
-            }
-            sqlStmt = JDBCQueryConstants.USER_LIST_QUERY;
-            prepStmt = dbConnection.prepareStatement(sqlStmt);
-            prepStmt.setInt(1, tenantId);
-
-            try {
-                rs = prepStmt.executeQuery();
-            } catch (SQLException e) {
-                if (e instanceof SQLTimeoutException) {
-                    log.error("The cause might be a time out. Hence ignored", e);
-                    return users;
-                }
-                String errorMessage = "Error while fetching users";
-                log.error(errorMessage, e);
-                throw new UserStoreException(errorMessage, e);
-            }
-
-            while (rs.next()) {
-
-                String name = rs.getString(2);
-                String password = rs.getString(3);
-                SampleUser sampleUser = new SampleUser();
-                sampleUser.setUserName(name);
-                sampleUser.setPassword(password);
-                users.add(sampleUser);
-            }
-            rs.close();
-        } catch (SQLException e) {
-            String msg = "Error occurred while retrieving users for filter.";
-            if (log.isDebugEnabled()) {
-                log.debug(msg, e);
-            }
-            throw new UserStoreException(msg, e);
-        } finally {
-            DatabaseUtil.closeAllConnections(dbConnection, rs, prepStmt);
-        }
-        return users;
     }
 }
