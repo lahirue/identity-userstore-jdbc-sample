@@ -333,13 +333,14 @@ public class CloudSampleJDBCUserStoreManager extends JDBCUserStoreManager {
 
             while (rs.next()) {
 
-                String name = rs.getString(2);
+                String name = rs.getString(1);
                 if (CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME.equals(name)) {
                     continue;
                 }
                 String domain = realmConfig
                         .getUserStoreProperty(UserCoreConstants.RealmConfig.PROPERTY_DOMAIN_NAME);
                 name = UserCoreUtil.addDomainToName(name, domain);
+                name += "/" + rs.getString(2);
                 lst.add(name);
             }
             rs.close();
